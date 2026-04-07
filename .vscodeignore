@@ -1,6 +1,10 @@
 .vscode/**
 .vscode-test/**
 src/**
+client/src/**
+server/src/**
+server/grammar/**
+server/generated/**
 test/**
 dist/test/**
 .gitignore

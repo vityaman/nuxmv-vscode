@@ -1,4 +1,5 @@
 dist/
+server/generated/
 node_modules/
 .vscode-test/
 *.vsix

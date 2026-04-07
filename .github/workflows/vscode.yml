@@ -26,6 +26,8 @@ jobs:
 
       - run: npm run compile
 
+      - run: npm run test:unit
+
       - name: Integration test (headless)
         run: |
           sudo apt-get update

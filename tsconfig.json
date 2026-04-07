@@ -11,5 +11,11 @@
     "sourceMap": true,
     "types": ["mocha", "node", "vscode"]
   },
-  "include": ["src/**/*.ts", "test/**/*.ts"]
+  "include": [
+    "client/src/**/*.ts",
+    "server/src/**/*.ts",
+    "server/generated/**/*.ts",
+    "test/**/*.ts"
+  ],
+  "exclude": ["node_modules"]
 }

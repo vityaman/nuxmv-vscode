@@ -7,7 +7,7 @@ const stylistic = require("@stylistic/eslint-plugin");
 const { defineConfig, globalIgnores } = require("eslint/config");
 
 module.exports = defineConfig([
-  globalIgnores(["dist", "node_modules", ".vscode-test"]),
+  globalIgnores(["dist", "node_modules", ".vscode-test", "server/generated"]),
   {
     files: ["**/*.ts"],
     extends: [

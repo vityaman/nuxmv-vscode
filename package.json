@@ -10,7 +10,7 @@
   "categories": [
     "Programming Languages"
   ],
-  "main": "./dist/src/extension.js",
+  "main": "./dist/client/src/extension.js",
   "contributes": {
     "languages": [
       {
@@ -37,10 +37,12 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "compile": "tsc -p ./",
+    "generate": "antlr-ng -Dlanguage=TypeScript -l false -v false -o server/generated server/grammar/NuXmv.g4",
+    "compile": "npm run generate && tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile",
     "test": "node ./dist/test/runTest.js",
+    "test:unit": "mocha --ui tdd \"dist/test/unit/**/*.js\"",
     "vscode:prepublish": "npm run compile",
     "package": "vsce package --allow-missing-repository"
   },
@@ -51,14 +53,21 @@
     "@eslint/js": "^10.0.1",
     "@stylistic/eslint-plugin": "^5.10.0",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^20.14.0",
+    "@types/node": "^20.19.39",
     "@types/vscode": "^1.85.0",
     "@vscode/test-electron": "^2.4.1",
     "@vscode/vsce": "^3.2.1",
+    "antlr-ng": "^1.0.10",
     "eslint": "^10.0.0",
     "globals": "^17.4.0",
     "mocha": "^10.7.0",
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.58.0"
+  },
+  "dependencies": {
+    "antlr4ng": "^3.0.16",
+    "vscode-languageclient": "^9.0.1",
+    "vscode-languageserver": "^9.0.1",
+    "vscode-languageserver-textdocument": "^1.0.12"
   }
 }
