@@ -3,7 +3,8 @@
   "displayName": "nuXmv",
   "description": "nuXmv language support for Visual Studio Code",
   "version": "0.0.1",
-  "publisher": "nuxmv-vscode",
+  "publisher": "vityaman",
+  "icon": "assets/logo.png",
   "engines": {
     "vscode": "^1.85.0"
   },
