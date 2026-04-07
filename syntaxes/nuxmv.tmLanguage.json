@@ -1,0 +1,173 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "nuXmv",
+  "scopeName": "source.nuxmv",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#word-literal" },
+    { "include": "#numeric" },
+    { "include": "#keywords-module" },
+    { "include": "#keywords-decl" },
+    { "include": "#keywords-spec" },
+    { "include": "#keywords-ctl-ltl" },
+    { "include": "#keywords-type" },
+    { "include": "#keywords-psl" },
+    { "include": "#keywords-case" },
+    { "include": "#keywords-builtin" },
+    { "include": "#constants-bool" },
+    { "include": "#uppercase-enumeration" },
+    { "include": "#general-identifier" },
+    { "include": "#annotation-time" },
+    { "include": "#operators" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-dash.nuxmv",
+          "match": "--.*$"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.nuxmv",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.nuxmv",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    },
+    "word-literal": {
+      "patterns": [
+        {
+          "name": "constant.numeric.word.nuxmv",
+          "match": "(?<![A-Za-z0-9_$#-])0[us]?[bodhBODH](?:\\d+)?_[0-9a-fA-F]+(?![0-9a-fA-F])"
+        }
+      ]
+    },
+    "numeric": {
+      "patterns": [
+        {
+          "name": "constant.numeric.float.nuxmv",
+          "match": "\\b\\d+\\.\\d+([eE][+-]?\\d+)?\\b|\\b\\d+[eE][+-]?\\d+\\b|\\b[fF]'\\d+/\\d+\\b"
+        },
+        {
+          "name": "constant.numeric.integer.nuxmv",
+          "match": "(?<!\\w)-?\\d+(?!\\w)"
+        }
+      ]
+    },
+    "keywords-module": {
+      "patterns": [
+        {
+          "name": "keyword.control.module.nuxmv",
+          "match": "\\b(?i:MODULE|ISA|PROCESS)\\b"
+        }
+      ]
+    },
+    "keywords-decl": {
+      "patterns": [
+        {
+          "name": "storage.type.declaration.nuxmv",
+          "match": "\\b(?i:VAR|IVAR|FROZENVAR|DEFINE|CONSTANTS|ASSIGN|TRANS|INIT|INVAR|FUN|PRED|MIRROR)\\b"
+        }
+      ]
+    },
+    "keywords-spec": {
+      "patterns": [
+        {
+          "name": "keyword.other.spec.nuxmv",
+          "match": "\\b(?i:CTLSPEC|SPEC|INVARSPEC|LTLSPEC|COMPUTE|PSLSPEC|FAIRNESS|JUSTICE|COMPASSION|NAME)\\b"
+        }
+      ]
+    },
+    "keywords-ctl-ltl": {
+      "patterns": [
+        {
+          "name": "keyword.control.temporal.nuxmv keyword.control",
+          "match": "\\b(?:AG|AX|AF|EG|EX|EF|ABF|EBF|ABG|EBG|BU|MIN|MAX|X|G|F|U|V|Y|Z|H|O|S|T)\\b"
+        }
+      ]
+    },
+    "keywords-type": {
+      "patterns": [
+        {
+          "name": "storage.type.primitive.nuxmv",
+          "match": "\\b(?i:boolean|integer|real|clock|unsigned|signed|word|array|of|continuous|none)\\b"
+        }
+      ]
+    },
+    "keywords-psl": {
+      "patterns": [
+        {
+          "name": "keyword.other.psl.nuxmv",
+          "match": "\\b(?i:always|never|next|eventually|until|before|within|whilenot|sequence|abort|forall|inf|endcase)\\b"
+        }
+      ]
+    },
+    "keywords-case": {
+      "patterns": [
+        {
+          "name": "keyword.control.case.nuxmv",
+          "match": "\\b(?i:case|esac)\\b"
+        }
+      ]
+    },
+    "keywords-builtin": {
+      "patterns": [
+        {
+          "name": "support.function.builtin.nuxmv",
+          "match": "\\b(?i:next|init|self|count|abs|max|min|sin|cos|exp|tan|ln|pow|asin|acos|atan|sqrt|floor|bool|toint|extend|resize|word1|time_until|time_since|xor|xnor|union|in|mod)\\b"
+        }
+      ]
+    },
+    "constants-bool": {
+      "patterns": [
+        {
+          "name": "constant.language.boolean.nuxmv",
+          "match": "\\b(?i:TRUE|FALSE)\\b"
+        }
+      ]
+    },
+    "uppercase-enumeration": {
+      "patterns": [
+        {
+          "name": "constant.other.enum.nuxmv",
+          "match": "\\b[A-Z][A-Z0-9_$#-]*\\b"
+        }
+      ]
+    },
+    "general-identifier": {
+      "patterns": [
+        {
+          "name": "variable.other.readwrite.nuxmv variable.other.readwrite",
+          "match": "(?<![A-Za-z0-9_$#-])[A-Za-z_][A-Za-z0-9_$#-]*(?![A-Za-z0-9_$#-])"
+        }
+      ]
+    },
+    "annotation-time": {
+      "patterns": [
+        {
+          "name": "meta.annotation.time.nuxmv",
+          "match": "@TIME\\s+DOMAIN\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.nuxmv",
+          "match": ":=|->|<->|\\?|:|\\|\\||&&|&|\\||!|<=|>=|!=|==|=|<|>|\\+|\\-|\\*|/|<<|>>|\\.\\."
+        }
+      ]
+    }
+  }
+}

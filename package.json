@@ -1,0 +1,64 @@
+{
+  "name": "nuxmv-vscode",
+  "displayName": "nuXmv",
+  "description": "nuXmv language support for Visual Studio Code",
+  "version": "0.0.1",
+  "publisher": "nuxmv-vscode",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "main": "./dist/src/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "nuxmv",
+        "aliases": [
+          "nuXmv",
+          "NuSMV",
+          "SMV"
+        ],
+        "extensions": [
+          ".smv",
+          ".nuxmv"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "nuxmv",
+        "scopeName": "source.nuxmv",
+        "path": "./syntaxes/nuxmv.tmLanguage.json"
+      }
+    ]
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "test": "node ./dist/test/runTest.js",
+    "vscode:prepublish": "npm run compile",
+    "package": "vsce package --allow-missing-repository"
+  },
+  "overrides": {
+    "serialize-javascript": "7.0.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^20.14.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/test-electron": "^2.4.1",
+    "@vscode/vsce": "^3.2.1",
+    "eslint": "^10.0.0",
+    "globals": "^17.4.0",
+    "mocha": "^10.7.0",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.58.0"
+  }
+}

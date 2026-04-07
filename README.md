@@ -1,2 +1,3 @@
-# nuxmv-vscode
-nuXmv language support for VSCode
+# nuXmv VSCode
+
+The nuXmv language support for VSCode.

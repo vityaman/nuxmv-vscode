@@ -1,0 +1,12 @@
+.vscode/**
+.vscode-test/**
+src/**
+test/**
+dist/test/**
+.gitignore
+.github/**
+**/tsconfig.json
+**/.eslintrc*
+eslint.config.js
+**/*.map
+nuxmv.md
