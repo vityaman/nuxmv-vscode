@@ -5,6 +5,7 @@ import {
   TextDocumentSyncKind,
   TextDocuments,
   type TextDocumentIdentifier,
+  type TextDocumentPositionParams,
 } from 'vscode-languageserver/node'
 import { TextDocument } from 'vscode-languageserver-textdocument'
 import { NuXmvLSPService } from './service.js'
@@ -29,12 +30,19 @@ connection.onInitialize(() => {
   return {
     capabilities: {
       textDocumentSync: TextDocumentSyncKind.Full,
+      completionProvider: {
+        resolveProvider: false,
+      },
       diagnosticProvider: {
         interFileDependencies: false,
         workspaceDiagnostics: false,
       },
     },
   }
+})
+
+connection.onCompletion((params: TextDocumentPositionParams) => {
+  return service.completion(params.textDocument.uri)
 })
 
 connection.languages.diagnostics.on((params: { textDocument: TextDocumentIdentifier }) => {

@@ -1,6 +1,7 @@
 import type { NuXmvParser, ProgramContext } from '../generated/NuXmvParser.js'
 import type { Diagnostic } from 'vscode-languageserver/node'
 import { parseNuXmvDocument } from './parseNuXmv.js'
+import { collectVariables } from './variable.js'
 
 export class NuXmvUnit {
   private _text = ''
@@ -18,6 +19,13 @@ export class NuXmvUnit {
 
   get diagnostics(): readonly Diagnostic[] {
     return this._diagnostics
+  }
+
+  get variables(): readonly string[] {
+    if (!this._tree) {
+      return []
+    }
+    return collectVariables(this._tree)
   }
 
   setText(content: string): void {

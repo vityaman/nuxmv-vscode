@@ -1,5 +1,16 @@
-import type { Diagnostic, DocumentUri } from 'vscode-languageserver/node'
+import {
+  CompletionItem,
+  CompletionItemKind,
+  type Diagnostic,
+  type DocumentUri,
+} from 'vscode-languageserver/node'
+import { NU_XMV_BUILTIN_FUNCTIONS, NU_XMV_KEYWORDS } from './name.js'
 import { NuXmvUnit } from './unit.js'
+
+function variableKind(label: string): CompletionItemKind {
+  const isUppercaseName = /[A-Z]/.test(label) && !/[a-z]/.test(label)
+  return isUppercaseName ? CompletionItemKind.Constant : CompletionItemKind.Variable
+}
 
 export class NuXmvLSPService {
   private readonly units = new Map<DocumentUri, NuXmvUnit>()
@@ -23,5 +34,24 @@ export class NuXmvLSPService {
       return []
     }
     return [...unit.diagnostics]
+  }
+
+  completion(uri: DocumentUri): CompletionItem[] {
+    const unit = this.units.get(uri)
+    const items: CompletionItem[] = []
+
+    for (const label of NU_XMV_KEYWORDS) {
+      items.push({ label, kind: CompletionItemKind.Keyword })
+    }
+    for (const label of NU_XMV_BUILTIN_FUNCTIONS) {
+      items.push({ label, kind: CompletionItemKind.Function })
+    }
+    if (unit) {
+      for (const label of unit.variables) {
+        items.push({ label, kind: variableKind(label) })
+      }
+    }
+
+    return items
   }
 }
