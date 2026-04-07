@@ -86,12 +86,9 @@ export function parseNuXmvDocument(text: string): ParseNuXmvResult {
     tree = parser.program()
   }
   catch (thrown: unknown) {
-    if (thrown instanceof RecognitionException) {
-      tree = undefined
+    tree = undefined
+    if (thrown instanceof Error) {
       errors.diagnostics.push(antlrThrownDiagnostic(thrown.message))
-    }
-    else {
-      throw thrown
     }
   }
 
