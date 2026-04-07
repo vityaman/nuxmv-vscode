@@ -36,7 +36,7 @@
     ]
   },
   "scripts": {
-    "lint": "eslint .",
+    "lint": "npm run generate && eslint .",
     "generate": "antlr-ng -Dlanguage=TypeScript -l false -v false -o server/generated server/grammar/NuXmv.g4",
     "compile": "npm run generate && tsc -p ./",
     "watch": "tsc -watch -p ./",
