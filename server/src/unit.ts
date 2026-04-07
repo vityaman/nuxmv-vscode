@@ -1,7 +1,11 @@
 import type { NuXmvParser, ProgramContext } from '../generated/NuXmvParser.js'
 import type { Diagnostic } from 'vscode-languageserver/node'
 import { parseNuXmvDocument } from './parseNuXmv.js'
-import { collectVariables } from './variable.js'
+import {
+  type IdentifierOccurrence,
+  collectIdentifierOccurrences,
+  collectVariables,
+} from './variable.js'
 
 export class NuXmvUnit {
   private _text = ''
@@ -26,6 +30,13 @@ export class NuXmvUnit {
       return []
     }
     return collectVariables(this._tree)
+  }
+
+  get identifierOccurrences(): readonly IdentifierOccurrence[] {
+    if (!this._tree) {
+      return []
+    }
+    return collectIdentifierOccurrences(this._tree)
   }
 
   setText(content: string): void {

@@ -4,6 +4,9 @@ import {
   ProposedFeatures,
   TextDocumentSyncKind,
   TextDocuments,
+  type PrepareRenameParams,
+  type ReferenceParams,
+  type RenameParams,
   type TextDocumentIdentifier,
   type TextDocumentPositionParams,
 } from 'vscode-languageserver/node'
@@ -37,12 +40,28 @@ connection.onInitialize(() => {
         interFileDependencies: false,
         workspaceDiagnostics: false,
       },
+      referencesProvider: true,
+      renameProvider: {
+        prepareProvider: true,
+      },
     },
   }
 })
 
 connection.onCompletion((params: TextDocumentPositionParams) => {
   return service.completion(params.textDocument.uri)
+})
+
+connection.onReferences((params: ReferenceParams) => {
+  return service.references(params.textDocument.uri, params.position)
+})
+
+connection.onPrepareRename((params: PrepareRenameParams) => {
+  return service.prepareRename(params.textDocument.uri, params.position)
+})
+
+connection.onRenameRequest((params: RenameParams) => {
+  return service.rename(params.textDocument.uri, params.position, params.newName)
 })
 
 connection.languages.diagnostics.on((params: { textDocument: TextDocumentIdentifier }) => {

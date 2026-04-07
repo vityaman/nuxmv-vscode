@@ -3,7 +3,13 @@ import {
   CompletionItemKind,
   type Diagnostic,
   type DocumentUri,
+  Location,
+  type Position,
+  type Range,
+  TextEdit,
+  WorkspaceEdit,
 } from 'vscode-languageserver/node'
+import { positionInRange, sortTextEdits } from './lsp.js'
 import { NU_XMV_BUILTIN_FUNCTIONS, NU_XMV_KEYWORDS } from './name.js'
 import { NuXmvUnit } from './unit.js'
 
@@ -33,6 +39,7 @@ export class NuXmvLSPService {
     if (!unit) {
       return []
     }
+
     return [...unit.diagnostics]
   }
 
@@ -53,5 +60,58 @@ export class NuXmvLSPService {
     }
 
     return items
+  }
+
+  references(uri: DocumentUri, position: Position): Location[] | null {
+    const unit = this.units.get(uri)
+    if (!unit) {
+      return null
+    }
+
+    const occurrences = unit.identifierOccurrences
+    const at = occurrences.find(o => positionInRange(position, o.range))
+    if (!at) {
+      return null
+    }
+
+    return occurrences.filter(o => o.name === at.name).map(o => Location.create(uri, o.range))
+  }
+
+  prepareRename(
+    uri: DocumentUri,
+    position: Position,
+  ): { range: Range, placeholder: string } | null {
+    const unit = this.units.get(uri)
+    if (!unit) {
+      return null
+    }
+
+    const occurrences = unit.identifierOccurrences
+    const at = occurrences.find(o => positionInRange(position, o.range))
+    if (!at) {
+      return null
+    }
+
+    return { range: at.range, placeholder: at.name }
+  }
+
+  rename(uri: DocumentUri, position: Position, newName: string): WorkspaceEdit | null {
+    const unit = this.units.get(uri)
+    if (!unit) {
+      return null
+    }
+
+    const occurrences = unit.identifierOccurrences
+    const at = occurrences.find(o => positionInRange(position, o.range))
+    if (!at) {
+      return null
+    }
+
+    const edits = sortTextEdits(
+      occurrences
+        .filter(o => o.name === at.name)
+        .map(o => TextEdit.replace(o.range, newName)),
+    )
+    return { changes: { [uri]: edits } }
   }
 }

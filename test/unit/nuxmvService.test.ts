@@ -48,6 +48,38 @@ ASSIGN
     assert.deepStrictEqual(service.analyze('file:///tmp/none.smv'), [])
   })
 
+  test('references returns all lexer IDENT tokens with the same spelling', () => {
+    const service = new NuXmvLSPService()
+    const uri = 'file:///tmp/example.smv'
+    service.setText(uri, minimalValid)
+    const refs = service.references(uri, { line: 2, character: 2 })
+    assert.ok(refs)
+    assert.strictEqual(refs.length, 2)
+    const [a, b] = refs
+    assert.strictEqual(a.uri, uri)
+    assert.strictEqual(b.uri, uri)
+  })
+
+  test('references returns null when cursor is not on an identifier', () => {
+    const service = new NuXmvLSPService()
+    const uri = 'file:///tmp/example.smv'
+    service.setText(uri, minimalValid)
+    assert.strictEqual(service.references(uri, { line: 0, character: 0 }), null)
+  })
+
+  test('rename replaces every occurrence of the identifier at the cursor', () => {
+    const service = new NuXmvLSPService()
+    const uri = 'file:///tmp/example.smv'
+    service.setText(uri, minimalValid)
+    const edit = service.rename(uri, { line: 2, character: 2 }, 'y')
+    const changes = edit?.changes
+    assert.ok(changes !== undefined)
+    const edits = changes[uri]
+    assert.ok(edits)
+    assert.strictEqual(edits.length, 2)
+    assert.strictEqual(edits.every(e => e.newText === 'y'), true)
+  })
+
   const crossroadFixtures = ['counter.smv', 'crossroad.smv', 'philosophers.smv'] as const
 
   for (const fileName of crossroadFixtures) {
