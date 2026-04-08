@@ -4,6 +4,7 @@ import {
   ProposedFeatures,
   TextDocumentSyncKind,
   TextDocuments,
+  type DocumentFormattingParams,
   type PrepareRenameParams,
   type ReferenceParams,
   type RenameParams,
@@ -44,6 +45,7 @@ connection.onInitialize(() => {
       renameProvider: {
         prepareProvider: true,
       },
+      documentFormattingProvider: true,
     },
   }
 })
@@ -62,6 +64,10 @@ connection.onPrepareRename((params: PrepareRenameParams) => {
 
 connection.onRenameRequest((params: RenameParams) => {
   return service.rename(params.textDocument.uri, params.position, params.newName)
+})
+
+connection.onDocumentFormatting((params: DocumentFormattingParams) => {
+  return service.formatDocument(params.textDocument.uri)
 })
 
 connection.languages.diagnostics.on((params: { textDocument: TextDocumentIdentifier }) => {

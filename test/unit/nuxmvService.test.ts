@@ -48,6 +48,25 @@ ASSIGN
     assert.deepStrictEqual(service.analyze('file:///tmp/none.smv'), [])
   })
 
+  test('formatDocument returns null for unknown document', () => {
+    const service = new NuXmvLSPService()
+    assert.strictEqual(service.formatDocument('file:///tmp/none.smv'), null)
+  })
+
+  test('formatDocument returns a full-range edit when text changes', () => {
+    const service = new NuXmvLSPService()
+    const uri = 'file:///tmp/fmt.smv'
+    const messy = 'MODULE  main\nVAR\n  x : boolean;\n'
+    service.setText(uri, messy)
+    const edits = service.formatDocument(uri)
+    assert.ok(edits !== null)
+    assert.strictEqual(edits.length, 1)
+    assert.ok(edits[0])
+    assert.ok(edits[0].newText !== messy)
+    assert.strictEqual(edits[0].range.start.line, 0)
+    assert.strictEqual(edits[0].range.start.character, 0)
+  })
+
   test('references returns all lexer IDENT tokens with the same spelling', () => {
     const service = new NuXmvLSPService()
     const uri = 'file:///tmp/example.smv'

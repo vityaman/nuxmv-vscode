@@ -5,10 +5,12 @@ import {
   type DocumentUri,
   Location,
   type Position,
-  type Range,
+  Range,
   TextEdit,
   WorkspaceEdit,
 } from 'vscode-languageserver/node'
+import { TextDocument } from 'vscode-languageserver-textdocument'
+import { formatNuXmvText } from './formatNuXmv.js'
 import { positionInRange, sortTextEdits } from './lsp.js'
 import { NU_XMV_BUILTIN_FUNCTIONS, NU_XMV_KEYWORDS } from './name.js'
 import { NuXmvUnit } from './unit.js'
@@ -41,6 +43,26 @@ export class NuXmvLSPService {
     }
 
     return [...unit.diagnostics]
+  }
+
+  formatDocument(uri: DocumentUri): TextEdit[] | null {
+    const unit = this.units.get(uri)
+    if (!unit) {
+      return null
+    }
+
+    const text = unit.text
+    const formatted = formatNuXmvText(text, { strict: false })
+    if (formatted === null) {
+      return null
+    }
+    if (formatted === text) {
+      return []
+    }
+
+    const doc = TextDocument.create(uri, 'nuxmv', 0, text)
+    const end = doc.positionAt(text.length)
+    return [TextEdit.replace(Range.create(0, 0, end.line, end.character), formatted)]
   }
 
   completion(uri: DocumentUri): CompletionItem[] {
